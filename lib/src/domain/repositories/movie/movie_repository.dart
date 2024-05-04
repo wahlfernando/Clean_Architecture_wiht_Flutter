@@ -2,14 +2,15 @@ import 'package:arquitetura_flutter_clean/src/domain/entities/movie_detail/movie
 import 'package:fpdart/fpdart.dart';
 import 'package:arquitetura_flutter_clean/src/domain/entities/movie_listings/movie_listings_entity.dart';
 
+import '../../../core/exceptions/database/database_exception.dart';
 import '../../../core/exceptions/network/network_exceptions.dart';
 
 abstract class MovieRepository {
   Future<Either<NetworkExceptions, MovieListingsEntity>> getTopRateMovies({required int page});
   Future<Either<NetworkExceptions, MovieListingsEntity>> getPopularMovies({required int page});
   Future<Either<NetworkExceptions, MovieListingsEntity>> getMoviesCredit({required int movieId});
-  Future<Either<NetworkExceptions, MovieListingsEntity>> getSaveMovieDetails();
-  Future<Either<NetworkExceptions, MovieListingsEntity>> saveMovieDetails({required MovieDetailEntity movieDetailEntity});
-  Future<Either<NetworkExceptions, MovieListingsEntity>> deleteMovieDetail({required int movieId});
-  Future<Either<NetworkExceptions, MovieListingsEntity>> isSavedMovieDetails({required int movieId});
+  Future<Either<DatabaseException, MovieListingsEntity>> getSaveMovieDetails();
+  Future<Either<DatabaseException, void>> saveMovieDetails({required MovieDetailEntity? movieDetailEntity});
+  Future<Either<DatabaseException, void>> deleteMovieDetail({required int? movieId});
+  Future<Either<DatabaseException, bool>> isSavedMovieDetail({required int? movieId});
 }
