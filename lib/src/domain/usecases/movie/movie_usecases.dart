@@ -13,22 +13,22 @@ class MovieUsecases {
     this._movieRepository,
   );
 
-  Future<Either<NetworkExceptions, MovieListingsEntity>> getPopularMovies(
+  Future<Either<NetworkException, MovieListingsEntity>> getPopularMovies(
       {required int page}) async {
     return _movieRepository.getPopularMovies(page: page);
   }
 
-  Future<Either<NetworkExceptions, MovieListingsEntity>> getTopRatesMovie(
+  Future<Either<NetworkException, MovieListingsEntity>> getTopRatesMovie(
       {required int page}) async {
     return _movieRepository.getTopRateMovies(page: page);
   }
 
-  Future<Either<NetworkExceptions, MovieListingsEntity>> getMovieCredits(
+  Future<Either<NetworkException, MovieListingsEntity>> getMovieCredits(
       {required int moveId}) async {
     return _movieRepository.getMoviesCredit(movieId: moveId);
   }
 
-  Future<Either<DatabaseException, MovieListingsEntity>>
+  Future<Either<DatabaseException, List<MovieDetailEntity>>>
       getSaveMovieDetails() async {
     return _movieRepository.getSaveMovieDetails();
   }

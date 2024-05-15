@@ -23,7 +23,7 @@ class MovieDetailCollection
   final double? voteAverage;
   final int? voteCount;
 
-  MovieDetailCollection(
+  MovieDetailCollection({
     this.id,
     this.adult,
     this.backdropPath,
@@ -38,7 +38,7 @@ class MovieDetailCollection
     this.video,
     this.voteAverage,
     this.voteCount,
-  );
+    });
 
   @override
   MovieDetailEntity toEntity() {
@@ -61,22 +61,22 @@ class MovieDetailCollection
   }
 
   @override
-  MovieDetailCollection frontEntity(MovieDetailEntity modelo) {
+  MovieDetailCollection frontEntity(MovieDetailEntity? model) {
     return MovieDetailCollection(
-      id,
-      adult,
-      backdropPath,
-      genreIds,
-      originalLanguage,
-      originalTitle,
-      overview,
-      popularity,
-      posterPath,
-      releaseDate,
-      title,
-      video,
-      voteAverage,
-      voteCount,
+      id: model?.id,
+      adult: model?.adult,
+      backdropPath: model?.backdropPath,
+      genreIds: model?.genreIds,
+      originalLanguage: model?.originalLanguage,
+      originalTitle: model?.originalTitle,
+      overview: model?.overview,
+      popularity: model?.popularity,
+      posterPath: model?.posterPath,
+      releaseDate: model?.releaseDate,
+      title: model?.title,
+      video: model?.video,
+      voteAverage: model?.voteAverage,
+      voteCount: model?.voteCount,
     );
   }
 }

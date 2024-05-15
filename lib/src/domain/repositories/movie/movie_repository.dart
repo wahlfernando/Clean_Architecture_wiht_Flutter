@@ -6,10 +6,10 @@ import '../../../core/exceptions/database/database_exception.dart';
 import '../../../core/exceptions/network/network_exceptions.dart';
 
 abstract class MovieRepository {
-  Future<Either<NetworkExceptions, MovieListingsEntity>> getTopRateMovies({required int page});
-  Future<Either<NetworkExceptions, MovieListingsEntity>> getPopularMovies({required int page});
-  Future<Either<NetworkExceptions, MovieListingsEntity>> getMoviesCredit({required int movieId});
-  Future<Either<DatabaseException, MovieListingsEntity>> getSaveMovieDetails();
+  Future<Either<NetworkException, MovieListingsEntity>> getTopRateMovies({required int page});
+  Future<Either<NetworkException, MovieListingsEntity>> getPopularMovies({required int page});
+  Future<Either<NetworkException, MovieListingsEntity>> getMoviesCredit({required int movieId});
+  Future<Either<DatabaseException, List<MovieDetailEntity>>> getSaveMovieDetails();
   Future<Either<DatabaseException, void>> saveMovieDetails({required MovieDetailEntity? movieDetailEntity});
   Future<Either<DatabaseException, void>> deleteMovieDetail({required int? movieId});
   Future<Either<DatabaseException, bool>> isSavedMovieDetail({required int? movieId});
