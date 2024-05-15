@@ -54,20 +54,20 @@ class MovieDetailModel extends Equatable
 
   @override
   MovieDetailEntity toEntity() => MovieDetailEntity(
-        id,
-        posterPath,
-        adult,
-        overview,
-        releaseDate,
-        genreIds,
-        originalTitle,
-        originalLanguage,
-        title,
-        backdropPath,
-        popularity,
-        voteCount,
-        video,
-        voteAverage,
+        id: id,
+        posterPath: posterPath,
+        adult: adult,
+        overview: overview,
+        releaseDate: releaseDate,
+        genreIds: genreIds,
+        originalTitle: originalTitle,
+        originalLanguage: originalLanguage,
+        title: title,
+        backdropPath: backdropPath,
+        popularity: popularity,
+        voteCount: voteCount,
+        video: video,
+        voteAverage: voteAverage,
       );
 
   Map<String, dynamic> toJson() => _$MovieDetailModelToJson(this);

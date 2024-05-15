@@ -16,24 +16,23 @@ class MovieDetailEntity extends Equatable {
   final bool? video;
   final double? voteAverage;
 
-  const MovieDetailEntity(
-    this.id,
-    this.posterPath,
-    this.adult,
-    this.overview,
-    this.releaseDate,
-    this.genreIds,
-    this.originalTitle,
-    this.originalLanguage,
-    this.title,
-    this.backdropPath,
-    this.popularity,
-    this.voteCount,
-    this.video,
-    this.voteAverage,
-  );
+  const MovieDetailEntity({
+    required this.id,
+    required this.posterPath,
+    required this.adult,
+    required this.overview,
+    required this.releaseDate,
+    required this.genreIds,
+    required this.originalTitle,
+    required this.originalLanguage,
+    required this.title,
+    required this.backdropPath,
+    required this.popularity,
+    required this.voteCount,
+    required this.video,
+    required this.voteAverage,
+  });
 
-  
   @override
   List<Object?> get props => [
         id,
@@ -70,5 +69,4 @@ class MovieDetailEntity extends Equatable {
   // video,
   // voteAverage,}
 //   ];
-
 }
