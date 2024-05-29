@@ -1,5 +1,3 @@
-import 'package:flutter/material.dart';
-
 part of '../../view/movie_detail_view.dart';
 
 

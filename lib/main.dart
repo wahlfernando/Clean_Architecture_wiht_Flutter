@@ -1,70 +1,77 @@
+import 'package:arquitetura_flutter_clean/src/data/datasource/local/actor/movie_local_data_source.dart';
+import 'package:arquitetura_flutter_clean/src/data/datasource/local/actor/movie_local_data_source_impl.dart';
+import 'package:arquitetura_flutter_clean/src/data/datasource/remote/actor/actor_remote_data_source.dart';
+import 'package:arquitetura_flutter_clean/src/data/datasource/remote/actor/actor_remote_data_source_impl.dart';
+import 'package:arquitetura_flutter_clean/src/data/datasource/remote/movie/movie_remote_data_source.dart';
+import 'package:arquitetura_flutter_clean/src/data/datasource/remote/movie/movie_remote_data_source_impl.dart';
+import 'package:arquitetura_flutter_clean/src/data/repositories/actor/actor_repository_impl.dart';
+import 'package:arquitetura_flutter_clean/src/data/repositories/movie/movie_repository_impl.dart';
+import 'package:arquitetura_flutter_clean/src/domain/usecases/actor/actor_usecases.dart';
+import 'package:arquitetura_flutter_clean/src/domain/usecases/movie/movie_usecases.dart';
+import 'package:auto_route/auto_route.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:flutter_dotenv/flutter_dotenv.dart';
+import 'package:flutter_screenutil/flutter_screenutil.dart';
+import 'package:get_it/get_it.dart';
+import 'package:hydrated_bloc/hydrated_bloc.dart';
+import 'package:path_provider/path_provider.dart';
 
-void main() {
-  runApp(const MyApp());
+import 'src/config/router/app_router.dart';
+import 'src/core/database/local_database.dart';
+import 'src/core/network/dio_client.dart';
+import 'src/core/theme/app_theme.dart';
+import 'src/core/theme/cubit/theme_cubit.dart';
+import 'src/domain/repositories/actor/actor_repository.dart';
+import 'src/domain/repositories/movie/movie_repository.dart';
+import 'src/presentation/cubit/actor/export_actor_cubits.dart';
+import 'src/presentation/cubit/movie/export_movie_cubits.dart';
+import 'src/presentation/cubit/movie/get_movie_credits/get_movie_credits_cubit.dart';
+
+part './src/injector.dart';
+
+final router = AppRouter();
+
+void main() async {
+  WidgetsFlutterBinding.ensureInitialized();
+  await dotenv.load();
+  await init();
+
+  await injector<LocalDatabase>().initialize();
+
+  final directory = await getApplicationDocumentsDirectory();
+
+  HydratedBloc.storage = await HydratedStorage.build(storageDirectory: directory);
+
+  runApp(const MainApp());
 }
 
-class MyApp extends StatelessWidget {
-  const MyApp({super.key});
+class MainApp extends StatelessWidget {
+  const MainApp({super.key});
 
   @override
   Widget build(BuildContext context) {
-    return MaterialApp(
-      title: 'Flutter Demo',
-      theme: ThemeData(
-        colorScheme: ColorScheme.fromSeed(seedColor: Colors.deepPurple),
-        useMaterial3: true,
-      ),
-      home: const MyHomePage(title: 'Flutter Demo Home Page'),
-    );
-  }
-}
-
-class MyHomePage extends StatefulWidget {
-  const MyHomePage({super.key, required this.title});
-
-
-
-  final String title;
-
-  @override
-  State<MyHomePage> createState() => _MyHomePageState();
-}
-
-class _MyHomePageState extends State<MyHomePage> {
-  int _counter = 0;
-
-  void _incrementCounter() {
-    setState(() {
-      _counter++;
-    });
-  }
-
-  @override
-  Widget build(BuildContext context) {
-    return Scaffold(
-      appBar: AppBar(
-        backgroundColor: Theme.of(context).colorScheme.inversePrimary,
-        title: Text(widget.title),
-      ),
-      body: Center(
-        child: Column(
-          mainAxisAlignment: MainAxisAlignment.center,
-          children: <Widget>[
-            const Text(
-              'You have pushed the button this many times:',
-            ),
-            Text(
-              '$_counter',
-              style: Theme.of(context).textTheme.headlineMedium,
-            ),
-          ],
-        ),
-      ),
-      floatingActionButton: FloatingActionButton(
-        onPressed: _incrementCounter,
-        tooltip: 'Increment',
-        child: const Icon(Icons.add),
+    return MultiBlocProvider(
+      providers: [
+        BlocProvider<ThemeCubit>(create: (context) => injector<ThemeCubit>()),
+        BlocProvider<GetMovieCreditsCubit>(create: (context) => injector<GetMovieCreditsCubit>()),
+        BlocProvider<GetSavedMoviesCubit>(create: (context) => injector<GetSavedMoviesCubit>()..getSavedMovieDetails()),
+      ],
+      child: ScreenUtilInit(
+        builder: (context, child) {
+          return BlocBuilder<ThemeCubit, ThemeState>(
+            builder: (context, themeState) {
+              return MaterialApp.router(
+                themeMode: themeState.themeMode,
+                theme: AppTheme.lightTheme,
+                darkTheme: AppTheme.darkTheme,
+                routerDelegate: AutoRouterDelegate(router),
+                routeInformationParser: router.defaultRouteParser(),
+                debugShowCheckedModeBanner: false,
+              );
+            },
+          );
+        },
       ),
     );
   }
